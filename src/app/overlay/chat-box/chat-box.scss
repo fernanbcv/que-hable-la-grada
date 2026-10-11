@@ -1,0 +1,87 @@
+$loop: 7s;
+$flow: 160px;
+
+:host {
+  position: relative;
+  display: block;
+  box-sizing: border-box;
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  border-radius: 14px;
+  background: linear-gradient(180deg, rgba(4, 9, 48, 0.82), rgba(3, 7, 40, 0.92));
+  animation: chat-in 0.6s cubic-bezier(0.2, 0.9, 0.3, 1) 0.9s both;
+}
+
+// Azulgrana line along the top edge, with the colours flowing to the right
+:host::before {
+  content: '';
+  position: absolute;
+  top: -2px;
+  right: 14px;
+  left: 14px;
+  height: 3px;
+  border-radius: 2px;
+  background: linear-gradient(
+      90deg,
+      var(--overlay-azul),
+      var(--overlay-red),
+      var(--overlay-azul)
+    )
+    0 0 / #{$flow} 100% repeat-x;
+  animation: chat-flow 4s linear infinite;
+}
+
+.label {
+  position: absolute;
+  top: -13px;
+  left: 14px;
+  padding: 0 11px;
+  overflow: hidden;
+  border-radius: 6px;
+  background: var(--overlay-red);
+  color: #fff;
+  font-family: var(--font-label);
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  line-height: 28px;
+  white-space: nowrap;
+}
+
+// Shine that crosses the label once per loop
+.label::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(105deg, transparent 35%, rgba(255, 255, 255, 0.6) 50%, transparent 65%);
+  transform: translateX(-100%);
+  animation: label-shine $loop ease-in-out 2s infinite;
+}
+
+.messages {
+  position: absolute;
+  inset: 22px 14px 14px;
+  overflow: hidden;
+}
+
+@keyframes chat-in {
+  from {
+    opacity: 0;
+    transform: translateX(-40px);
+  }
+}
+
+@keyframes chat-flow {
+  to {
+    background-position: $flow 0;
+  }
+}
+
+@keyframes label-shine {
+  0% {
+    transform: translateX(-100%);
+  }
+  18%,
+  100% {
+    transform: translateX(100%);
+  }
+}

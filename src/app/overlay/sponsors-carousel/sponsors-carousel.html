@@ -1,0 +1,10 @@
+<p class="label">{{ label() }}</p>
+<div class="viewport">
+  <ul [class.sliding]="sliding()" (transitionend)="onSlideEnd()">
+    @for (item of row(); track item.key) {
+      <li>
+        <img [src]="item.sponsor.logo" [alt]="item.sponsor.name" [style.scale]="item.sponsor.scale" />
+      </li>
+    }
+  </ul>
+</div>

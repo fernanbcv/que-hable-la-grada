@@ -1,0 +1,98 @@
+@use 'sass:math';
+
+$loop: 7s;
+
+// Geometry of lorengonca_escudo.png: the shield sits inside transparent padding
+$image-width: 800;
+$image-height: 1100;
+$shield-left: 50;
+$shield-top: 40;
+$shield-width: 700;
+$ball-x: 532;
+$ball-y: 722;
+$ball-radius: 97;
+
+:host {
+  display: block;
+  filter: drop-shadow(0 6px 14px rgba(0, 0, 0, 0.35));
+  animation: logo-in 0.9s cubic-bezier(0.2, 1.4, 0.4, 1) both;
+}
+
+// Sized so the shield itself, not the padded image, fills the host width
+.shield {
+  position: relative;
+  width: math.percentage(math.div($image-width, $shield-width));
+  margin: math.percentage(math.div(-$shield-top, $shield-width)) 0 0
+    math.percentage(math.div(-$shield-left, $shield-width));
+  aspect-ratio: #{$image-width} / #{$image-height};
+  animation: logo-float 5s ease-in-out 0.9s infinite;
+}
+
+img {
+  display: block;
+  width: 100%;
+}
+
+// A round copy of the ball laid over the original so it can spin on its own
+.ball {
+  position: absolute;
+  left: math.percentage(math.div($ball-x - $ball-radius, $image-width));
+  top: math.percentage(math.div($ball-y - $ball-radius, $image-height));
+  width: math.percentage(math.div($ball-radius * 2, $image-width));
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background-image: var(--logo);
+  background-position: math.percentage(
+      math.div($ball-x - $ball-radius, $image-width - $ball-radius * 2)
+    )
+    math.percentage(math.div($ball-y - $ball-radius, $image-height - $ball-radius * 2));
+  background-size: math.percentage(math.div($image-width, $ball-radius * 2)) auto;
+  animation: ball-spin $loop ease-in-out 1.2s infinite;
+}
+
+.shine {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+      105deg,
+      transparent 44%,
+      rgba(255, 255, 255, 0.55) 50%,
+      transparent 56%
+    )
+    100% 0 / 300% 100%;
+  mask: var(--logo) center / 100% 100% no-repeat;
+  animation: logo-shine $loop ease-in-out 1.2s infinite;
+}
+
+@keyframes logo-in {
+  from {
+    opacity: 0;
+    transform: translateY(-40px) scale(0.6);
+  }
+}
+
+@keyframes logo-float {
+  50% {
+    transform: translateY(-7px);
+  }
+}
+
+@keyframes ball-spin {
+  0% {
+    transform: rotate(0);
+  }
+  18%,
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes logo-shine {
+  0% {
+    background-position: 100% 0;
+  }
+  18%,
+  100% {
+    background-position: 0 0;
+  }
+}

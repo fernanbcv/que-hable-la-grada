@@ -1,0 +1,54 @@
+@if (src(); as videoSrc) {
+  <video [src]="videoSrc" autoplay loop playsinline [muted]="true"></video>
+}
+
+<!-- Azulgrana corner strokes. The colours flow along each stroke towards its corner; each path starts at the corner so it can be drawn outwards from there. -->
+<svg class="accent accent-top" viewBox="0 0 240 23" aria-hidden="true">
+  <defs>
+    <linearGradient
+      id="camera-accent-top"
+      gradientUnits="userSpaceOnUse"
+      spreadMethod="repeat"
+      x1="0"
+      x2="160"
+    >
+      <stop class="azul" offset="0" />
+      <stop class="grana" offset="0.5" />
+      <stop class="azul" offset="1" />
+      <animateTransform
+        attributeName="gradientTransform"
+        type="translate"
+        from="0 0"
+        to="160 0"
+        dur="4s"
+        repeatCount="indefinite"
+      />
+    </linearGradient>
+  </defs>
+  <path d="M237 22.5A19.5 19.5 0 0 0 217.5 3H0"pathLength="1" stroke="url(#camera-accent-top)" />
+</svg>
+
+<svg class="accent accent-bottom" viewBox="0 0 240 23" aria-hidden="true">
+  <defs>
+    <linearGradient
+      id="camera-accent-bottom"
+      gradientUnits="userSpaceOnUse"
+      spreadMethod="repeat"
+      x1="0"
+      x2="160"
+    >
+      <stop class="azul" offset="0" />
+      <stop class="grana" offset="0.5" />
+      <stop class="azul" offset="1" />
+      <animateTransform
+        attributeName="gradientTransform"
+        type="translate"
+        from="0 0"
+        to="-160 0"
+        dur="4s"
+        repeatCount="indefinite"
+      />
+    </linearGradient>
+  </defs>
+  <path d="M3 0.5A19.5 19.5 0 0 0 22.5 20H240" pathLength="1" stroke="url(#camera-accent-bottom)" />
+</svg>

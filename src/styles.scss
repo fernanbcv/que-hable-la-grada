@@ -1,0 +1,24 @@
+/* You can add global styles to this file, and also import other style files */
+:root {
+  --overlay-navy: #060b2c;
+  --overlay-blue: #0d2a82;
+  --overlay-red: #d3243f;
+  --overlay-azul: #2f6bff;
+  --overlay-light-blue: #8ea6ff;
+  --overlay-muted: #c3cbe6;
+
+  --font-display: 'Oswald', 'Arial Narrow', sans-serif;
+  --font-label: 'Oswald', 'Arial Narrow', sans-serif;
+}
+
+html,
+body {
+  height: 100%;
+  margin: 0;
+  overflow: hidden;
+}
+
+/* OBS replaces the body background with a transparent one, so this only shows in a normal browser */
+body {
+  background: #000;
+}

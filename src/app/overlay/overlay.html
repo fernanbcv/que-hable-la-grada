@@ -1,0 +1,35 @@
+<div class="stage" [style.transform]="'scale(' + scale() + ')'">
+  @if (shows('fondo')) {
+    <app-overlay-background />
+  }
+
+  @if (shows('logo')) {
+    <app-brand-logo class="logo" />
+  }
+  @if (shows('titulo')) {
+    <app-show-title class="show-title" />
+  }
+  @if (shows('chat')) {
+    <app-chat-box class="chat" />
+  }
+  @if (shows('redes')) {
+    <app-social-links class="socials" />
+  }
+  @if (shows('horario')) {
+    <app-schedule-card class="schedule" />
+  }
+
+  @if (shows('camara')) {
+    <app-camera-frame />
+  }
+
+  @if (shows('en-directo')) {
+    <app-live-badge class="live" />
+  }
+  @if (shows('rotulo')) {
+    <app-stream-title class="stream-title" />
+  }
+  @if (shows('carrusel')) {
+    <app-sponsors-carousel class="sponsors" />
+  }
+</div>

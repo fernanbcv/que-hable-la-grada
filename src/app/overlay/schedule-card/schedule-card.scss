@@ -1,0 +1,86 @@
+$loop: 7s;
+$flow: 170px;
+
+:host {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  box-sizing: border-box;
+  padding: 0 14px 0 18px;
+  overflow: hidden;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.08);
+  white-space: nowrap;
+  animation: card-in 0.6s cubic-bezier(0.2, 0.9, 0.3, 1) 1.1s both;
+}
+
+// Azulgrana bar on the left edge, with the colours flowing downwards
+:host::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 4px;
+  background: linear-gradient(
+      180deg,
+      var(--overlay-red),
+      var(--overlay-azul),
+      var(--overlay-red)
+    )
+    0 0 / 100% #{$flow} repeat-y;
+  animation: card-flow 4s linear infinite;
+}
+
+// Shine that crosses the card once per loop
+:host::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(105deg, transparent 40%, rgba(255, 255, 255, 0.16) 50%, transparent 60%);
+  transform: translateX(-100%);
+  animation: card-shine $loop ease-in-out 2.4s infinite;
+}
+
+.label {
+  color: var(--overlay-muted);
+  font-family: var(--font-label);
+  font-size: 15px;
+  font-weight: 500;
+  letter-spacing: 2.5px;
+  line-height: 20px;
+}
+
+.days {
+  margin-top: 6px;
+  color: #fff;
+  font-family: var(--font-display);
+  font-size: 23px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  line-height: 32px;
+}
+
+@keyframes card-in {
+  from {
+    opacity: 0;
+    transform: translateX(-40px);
+  }
+}
+
+@keyframes card-flow {
+  to {
+    background-position: 0 $flow;
+  }
+}
+
+@keyframes card-shine {
+  0% {
+    transform: translateX(-100%);
+  }
+  18%,
+  100% {
+    transform: translateX(100%);
+  }
+}
