@@ -19,6 +19,23 @@ describe('Overlay', () => {
     expect(compiled.querySelector('.stage')?.children.length).toBe(10);
   });
 
+  it('should show one equal camera per interview participant', async () => {
+    const fixture = TestBed.createComponent(Overlay);
+    for (const participantes of [2, 3, 4]) {
+      fixture.componentRef.setInput('participantes', String(participantes));
+      await fixture.whenStable();
+      const frames = [
+        ...(fixture.nativeElement as HTMLElement).querySelectorAll<HTMLElement>(
+          'app-interview app-camera-frame',
+        ),
+      ];
+      expect(frames.length).toBe(participantes);
+      // Every camera is one cell of the 2x2 grid, whatever the count
+      expect(new Set(frames.map((frame) => frame.style.width))).toEqual(new Set(['761px']));
+      expect(new Set(frames.map((frame) => frame.style.height))).toEqual(new Set(['426px']));
+    }
+  });
+
   it('should render only the requested element', async () => {
     const fixture = TestBed.createComponent(Overlay);
     fixture.componentRef.setInput('element', 'carrusel');

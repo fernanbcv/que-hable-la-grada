@@ -1,6 +1,6 @@
 <div class="stage" [style.transform]="'scale(' + scale() + ')'">
   @if (shows('fondo')) {
-    <app-overlay-background />
+    <app-overlay-background [cameras]="cameras()" />
   }
 
   @if (shows('logo')) {
@@ -20,7 +20,11 @@
   }
 
   @if (shows('camara')) {
-    <app-camera-frame />
+    @if (interview(); as participants) {
+      <app-interview [participants]="participants" />
+    } @else {
+      <app-camera-frame />
+    }
   }
 
   @if (shows('en-directo')) {

@@ -1,0 +1,4 @@
+// No box of its own: each camera frame places itself on the overlay canvas
+:host {
+  display: contents;
+}

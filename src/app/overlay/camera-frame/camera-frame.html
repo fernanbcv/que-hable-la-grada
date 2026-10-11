@@ -6,7 +6,7 @@
 <svg class="accent accent-top" viewBox="0 0 240 23" aria-hidden="true">
   <defs>
     <linearGradient
-      id="camera-accent-top"
+      [attr.id]="topGradient"
       gradientUnits="userSpaceOnUse"
       spreadMethod="repeat"
       x1="0"
@@ -25,13 +25,17 @@
       />
     </linearGradient>
   </defs>
-  <path d="M237 22.5A19.5 19.5 0 0 0 217.5 3H0"pathLength="1" stroke="url(#camera-accent-top)" />
+  <path
+    d="M237 22.5A19.5 19.5 0 0 0 217.5 3H0"
+    pathLength="1"
+    [attr.stroke]="'url(#' + topGradient + ')'"
+  />
 </svg>
 
 <svg class="accent accent-bottom" viewBox="0 0 240 23" aria-hidden="true">
   <defs>
     <linearGradient
-      id="camera-accent-bottom"
+      [attr.id]="bottomGradient"
       gradientUnits="userSpaceOnUse"
       spreadMethod="repeat"
       x1="0"
@@ -50,5 +54,9 @@
       />
     </linearGradient>
   </defs>
-  <path d="M3 0.5A19.5 19.5 0 0 0 22.5 20H240" pathLength="1" stroke="url(#camera-accent-bottom)" />
+  <path
+    d="M3 0.5A19.5 19.5 0 0 0 22.5 20H240"
+    pathLength="1"
+    [attr.stroke]="'url(#' + bottomGradient + ')'"
+  />
 </svg>
