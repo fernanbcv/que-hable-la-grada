@@ -1,5 +1,5 @@
-$card-width: 190px;
-$card-gap: 14px;
+$card-width: 196px;
+$card-gap: 6px;
 
 :host {
   display: flex;
@@ -19,10 +19,30 @@ $card-gap: 14px;
   text-align: right;
 }
 
+// A pitch-side LED advertising board: a dark frame around panels that run past edge to edge
 .viewport {
+  position: relative;
   width: $card-width * 3 + $card-gap * 2;
+  padding: 5px 0;
   overflow: hidden;
-  mask-image: linear-gradient(90deg, transparent, #000 4%, #000 96%, transparent);
+  border-radius: 6px;
+  background: #04060f;
+  box-shadow:
+    0 0 0 2px #1a2146,
+    0 0 26px rgba(47, 107, 255, 0.35),
+    0 10px 18px rgba(0, 0, 0, 0.45);
+
+  // The LED grid and the sheen of the screen, drawn over the moving panels
+  &::after {
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(180deg, rgba(255, 255, 255, 0.2), transparent 30%, transparent 65%, rgba(0, 0, 0, 0.22)),
+      repeating-linear-gradient(0deg, rgba(0, 0, 0, 0.09) 0 1px, transparent 1px 4px),
+      repeating-linear-gradient(90deg, rgba(0, 0, 0, 0.09) 0 1px, transparent 1px 4px);
+    content: '';
+    pointer-events: none;
+  }
 }
 
 ul {
@@ -32,20 +52,25 @@ ul {
   padding: 0;
   list-style: none;
 
-  &.sliding {
-    transform: translateX(-($card-width + $card-gap));
-    transition: transform 0.4s ease-in-out;
+  &.scrolling {
+    animation: belt linear infinite;
+  }
+}
+
+// The row holds the sponsors twice, so moving one whole set along lands on an identical frame
+@keyframes belt {
+  to {
+    transform: translateX(calc(var(--count) * #{-($card-width + $card-gap)}));
   }
 }
 
 li {
   flex: none;
   width: $card-width;
-  height: 96px;
+  height: 90px;
   box-sizing: border-box;
   padding: 8px 12px;
   overflow: hidden;
-  border-radius: 10px;
   background: #fff;
 }
 

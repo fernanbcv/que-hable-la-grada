@@ -1,4 +1,4 @@
-import { Component, DestroyRef, computed, effect, inject, input, signal } from '@angular/core';
+import { Component, computed, input } from '@angular/core';
 
 export interface Sponsor {
   name: string;
@@ -27,43 +27,20 @@ const VISIBLE = 3;
 export class SponsorsCarousel {
   readonly label = input('CON EL APOYO DE');
   readonly sponsors = input(DEFAULT_SPONSORS);
-  /** Milliseconds each sponsor stays in place before the row advances. */
+  /** Milliseconds the belt takes to move one sponsor along. */
   readonly interval = input(2500);
 
-  protected readonly sliding = signal(false);
-  private readonly first = signal(0);
+  /** Whether there are more sponsors than fit, so they have to scroll. */
+  protected readonly scrolling = computed(() => this.sponsors().length > VISIBLE);
 
-  /** The visible sponsors plus the next one waiting off-screen, starting at `first`. */
+  /** The sponsors, followed by a copy when scrolling so the belt loops without a gap. */
   protected readonly row = computed(() => {
-    const sponsors = this.sponsors();
-    if (sponsors.length === 0) {
-      return [];
-    }
-    const count = sponsors.length > VISIBLE ? VISIBLE + 1 : sponsors.length;
-    return Array.from({ length: count }, (_, i) => {
-      const index = (this.first() + i) % sponsors.length;
-      return { key: index, sponsor: sponsors[index] };
-    });
+    const sponsors = this.sponsors().map((sponsor) => ({ sponsor, copy: false }));
+    return this.scrolling()
+      ? [...sponsors, ...sponsors.map((item) => ({ ...item, copy: true }))]
+      : sponsors;
   });
 
-  constructor() {
-    const destroyRef = inject(DestroyRef);
-    let timer: ReturnType<typeof setInterval> | undefined;
-
-    effect(() => {
-      clearInterval(timer);
-      if (this.sponsors().length > VISIBLE) {
-        timer = setInterval(() => this.sliding.set(true), this.interval());
-      }
-    });
-    destroyRef.onDestroy(() => clearInterval(timer));
-  }
-
-  protected onSlideEnd(): void {
-    if (!this.sliding()) {
-      return;
-    }
-    this.sliding.set(false);
-    this.first.update((first) => (first + 1) % this.sponsors().length);
-  }
+  /** One full loop moves every sponsor past, so it lasts one interval per sponsor. */
+  protected readonly loop = computed(() => this.interval() * this.sponsors().length);
 }
