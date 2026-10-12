@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Rutas · Que Hable La Grada</title>
+<style>
+  :root { --navy: #060b2c; --blue: #0d2a82; --red: #d3243f; --light: #8ea6ff; --muted: #c3cbe6; }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; padding: 32px 16px 48px;
+    font-family: "Segoe UI", system-ui, sans-serif;
+    color: #fff;
+    background: linear-gradient(180deg, #0a1f6b 0%, #081247 35%, var(--navy) 75%) fixed;
+    min-height: 100vh;
+  }
+  main { max-width: 860px; margin: 0 auto; }
+  h1 { margin: 0 0 4px; font-size: 28px; }
+  h1 span { color: var(--red); }
+  p.lead { margin: 0 0 24px; color: var(--muted); }
+  label { display: block; font-size: 13px; color: var(--muted); margin-bottom: 6px; }
+  input {
+    width: 100%; padding: 10px 12px; font: inherit; color: #fff;
+    background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 8px;
+  }
+  input:focus { outline: 2px solid var(--light); outline-offset: 1px; }
+  h2 { margin: 32px 0 10px; font-size: 14px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--light); }
+  ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+  li {
+    display: grid; grid-template-columns: 150px 1fr auto; gap: 12px; align-items: center;
+    padding: 12px 14px; background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 10px;
+  }
+  .name { font-weight: 600; }
+  .desc { display: block; font-weight: 400; font-size: 13px; color: var(--muted); }
+  a { color: #fff; font-family: Consolas, monospace; font-size: 14px; word-break: break-all; }
+  a:hover { color: var(--light); }
+  button {
+    padding: 7px 12px; font: inherit; font-size: 13px; color: #fff; cursor: pointer;
+    background: var(--red); border: 0; border-radius: 6px;
+  }
+  button:hover { filter: brightness(1.15); }
+  @media (max-width: 620px) { li { grid-template-columns: 1fr; gap: 6px; } button { justify-self: start; } }
+</style>
+</head>
+<body>
+<main>
+  <h1>Que Hable <span>La Grada</span></h1>
+  <p class="lead">Ruta de cada componente del overlay. Cada una pinta solo ese elemento, en su sitio, sobre un lienzo transparente de 1920×1080.</p>
+
+  <label for="base">Dirección base</label>
+  <input id="base" value="https://que-hable-la-grada.vercel.app" spellcheck="false">
+
+  <h2>Overlay completo</h2>
+  <ul data-routes='[
+    ["Overlay completo", "Todos los elementos con una cámara", "/"],
+    ["Entrevista · 2", "Overlay completo con 2 cámaras", "/entrevista/2"],
+    ["Entrevista · 3", "Overlay completo con 3 cámaras", "/entrevista/3"],
+    ["Entrevista · 4", "Overlay completo con 4 cámaras", "/entrevista/4"]
+  ]'></ul>
+
+  <h2>Componentes sueltos</h2>
+  <ul data-routes='[
+    ["Fondo", "Fondo liso, sin hueco de cámara", "/fondo"],
+    ["Logo", "Escudo de Lorengonca", "/logo"],
+    ["Título", "Que Hable La Grada", "/titulo"],
+    ["Chat", "Caja del chat en directo", "/chat"],
+    ["Redes", "Sígueme en todas mis redes", "/redes"],
+    ["Horario", "Tarjeta de días y hora de los directos", "/horario"],
+    ["Cámara", "Marco de la cámara", "/camara"],
+    ["En directo", "Insignia EN DIRECTO", "/en-directo"],
+    ["Rótulo", "Lorengonca · Actualidad azulgrana", "/rotulo"],
+    ["Carrusel", "Carrusel de patrocinadores", "/carrusel"]
+  ]'></ul>
+</main>
+
+<script>
+  const base = document.getElementById('base');
+  // Served from the app itself, the routes hang off wherever this page is
+  if (location.protocol.startsWith('http')) {
+    base.value = location.origin;
+  }
+
+  function render() {
+    const root = base.value.trim().replace(/\/+$/, '');
+    for (const list of document.querySelectorAll('ul[data-routes]')) {
+      list.replaceChildren(...JSON.parse(list.dataset.routes).map(([name, desc, path]) => {
+        const url = root + path;
+        const li = document.createElement('li');
+
+        const label = document.createElement('span');
+        label.className = 'name';
+        label.textContent = name;
+        const small = document.createElement('span');
+        small.className = 'desc';
+        small.textContent = desc;
+        label.append(small);
+
+        const link = document.createElement('a');
+        link.href = url;
+        link.target = '_blank';
+        link.textContent = url;
+
+        const copy = document.createElement('button');
+        copy.textContent = 'Copiar';
+        copy.onclick = async () => {
+          await navigator.clipboard.writeText(url);
+          copy.textContent = 'Copiado';
+          setTimeout(() => (copy.textContent = 'Copiar'), 1200);
+        };
+
+        li.append(label, link, copy);
+        return li;
+      }));
+    }
+  }
+
+  base.addEventListener('input', render);
+  render();
+</script>
+</body>
+</html>
