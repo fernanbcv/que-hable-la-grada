@@ -16,6 +16,7 @@ $sidebar-width: 356px;
 .schedule,
 .live,
 .stream-title,
+.crest,
 .sponsors {
   position: absolute;
 }
@@ -60,6 +61,13 @@ $sidebar-width: 356px;
 .stream-title {
   top: 998px;
   left: 360px;
+}
+
+// Between the stream title and the sponsors board
+.crest {
+  top: 951px;
+  left: 1081px;
+  width: 108px;
 }
 
 .sponsors {

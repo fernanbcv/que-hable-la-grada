@@ -2,21 +2,7 @@ $card-width: 196px;
 $card-gap: 2px;
 
 :host {
-  display: flex;
-  align-items: center;
-  gap: 22px;
-}
-
-.label {
-  width: 90px;
-  margin: 0;
-  color: var(--overlay-muted);
-  font-family: var(--font-label);
-  font-size: 15px;
-  font-weight: 500;
-  letter-spacing: 4px;
-  line-height: 19px;
-  text-align: right;
+  display: block;
 }
 
 // A pitch-side advertising board: one lit screen between a top rail and a base, mirrored on the ground

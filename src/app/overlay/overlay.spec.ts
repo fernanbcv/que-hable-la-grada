@@ -16,7 +16,7 @@ describe('Overlay', () => {
     expect(compiled.querySelector('app-camera-frame')).toBeTruthy();
     // The 7 sponsors twice over, so the belt loops without a gap
     expect(compiled.querySelectorAll('app-sponsors-carousel li').length).toBe(14);
-    expect(compiled.querySelector('.stage')?.children.length).toBe(10);
+    expect(compiled.querySelector('.stage')?.children.length).toBe(11);
   });
 
   it('should show one equal camera per interview participant', async () => {

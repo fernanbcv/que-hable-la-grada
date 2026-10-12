@@ -1,0 +1,123 @@
+$loop: 7s;
+
+:host {
+  display: block;
+  isolation: isolate;
+  filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.45));
+  animation:
+    crest-in 0.7s cubic-bezier(0.2, 1.4, 0.4, 1) 1.2s both,
+    crest-float 5s ease-in-out 1.9s infinite;
+}
+
+// A heart monitor trace behind the crest, showing on both sides of it. The line stays drawn and a
+// brighter stretch runs along it once per loop.
+.trace {
+  position: absolute;
+  z-index: -1;
+  top: 50%;
+  left: -46.3%;
+  width: 192.6%;
+  overflow: visible;
+  translate: 0 -50%;
+
+  path {
+    fill: none;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+}
+
+.line {
+  // Azul on the left of the crest, grana on the right
+  stroke: url('#crest-azulgrana');
+  stroke-dasharray: 1;
+  stroke-width: 2.5;
+  animation: crest-draw 1s ease-out 1.5s both;
+}
+
+.sweep {
+  stroke: #fff;
+  stroke-dasharray: 0.22 1.5;
+  stroke-dashoffset: 0.22;
+  stroke-width: 3;
+  filter: drop-shadow(0 0 4px #fff);
+  animation: crest-sweep $loop linear 2.6s infinite;
+}
+
+// Beats as the bright stretch of the trace passes behind it, while a shine crosses it
+.badge {
+  position: relative;
+  animation: crest-beat $loop ease-in-out 2.6s infinite;
+}
+
+img {
+  display: block;
+  width: 100%;
+}
+
+.shine {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+      105deg,
+      transparent 44%,
+      rgba(255, 255, 255, 0.65) 50%,
+      transparent 56%
+    )
+    100% 0 / 300% 100%;
+  mask: var(--crest) center / 100% 100% no-repeat;
+  animation: crest-shine $loop linear 2.6s infinite;
+}
+
+@keyframes crest-in {
+  from {
+    opacity: 0;
+    transform: scale(0.5);
+  }
+}
+
+@keyframes crest-float {
+  50% {
+    transform: translateY(-5px);
+  }
+}
+
+@keyframes crest-beat {
+  0%,
+  10%,
+  20%,
+  100% {
+    transform: scale(1);
+  }
+  15% {
+    transform: scale(1.08);
+  }
+}
+
+@keyframes crest-draw {
+  from {
+    stroke-dashoffset: 1;
+  }
+}
+
+@keyframes crest-sweep {
+  0% {
+    stroke-dashoffset: 0.22;
+  }
+  30%,
+  100% {
+    stroke-dashoffset: -1.1;
+  }
+}
+
+// Crosses the crest while the bright stretch of the trace is hidden behind it
+@keyframes crest-shine {
+  0%,
+  9% {
+    background-position: 100% 0;
+  }
+  20%,
+  100% {
+    background-position: 0 0;
+  }
+}

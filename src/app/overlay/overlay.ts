@@ -2,6 +2,7 @@ import { Component, computed, input, signal } from '@angular/core';
 import { BrandLogo } from './brand-logo/brand-logo';
 import { CameraFrame } from './camera-frame/camera-frame';
 import { ChatBox } from './chat-box/chat-box';
+import { ClubCrest } from './club-crest/club-crest';
 import { Interview } from './interview/interview';
 import { LiveBadge } from './live-badge/live-badge';
 import { OverlayBackground } from './overlay-background/overlay-background';
@@ -26,6 +27,7 @@ export const OVERLAY_ELEMENTS = [
   'camara',
   'en-directo',
   'rotulo',
+  'escudo',
   'carrusel',
 ] as const;
 
@@ -39,6 +41,7 @@ export const INTERVIEW_SIZES = [2, 3, 4];
     BrandLogo,
     CameraFrame,
     ChatBox,
+    ClubCrest,
     Interview,
     LiveBadge,
     OverlayBackground,

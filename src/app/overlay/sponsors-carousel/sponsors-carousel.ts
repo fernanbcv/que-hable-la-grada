@@ -25,7 +25,6 @@ const VISIBLE = 3;
   templateUrl: './sponsors-carousel.html',
 })
 export class SponsorsCarousel {
-  readonly label = input('CON EL APOYO DE');
   readonly sponsors = input(DEFAULT_SPONSORS);
   /** Milliseconds the belt takes to move one sponsor along. */
   readonly interval = input(2500);

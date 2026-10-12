@@ -15,7 +15,7 @@ $ball-radius: 500;
 :host {
   display: block;
   filter: drop-shadow(0 6px 14px rgba(0, 0, 0, 0.35));
-  animation: logo-in 0.9s cubic-bezier(0.2, 1.4, 0.4, 1) both;
+  animation: logo-in 0.9s ease-out both;
 }
 
 // Sized so the shield itself, not the padded image, fills the host width
@@ -25,7 +25,37 @@ $ball-radius: 500;
   margin: math.percentage(math.div(-$shield-top, $shield-width)) 0 0
     math.percentage(math.div(-$shield-left, $shield-width));
   aspect-ratio: #{$image-width} / #{$image-height};
-  animation: logo-float 5s ease-in-out 0.9s infinite;
+  // Keeps the neon behind the image without it slipping under the background
+  isolation: isolate;
+
+  // Azulgrana neon behind the badge: a wide halo and a tight bright tube, both turning slowly
+  &::before,
+  &::after {
+    position: absolute;
+    z-index: -1;
+    border-radius: 50%;
+    background: conic-gradient(
+      var(--overlay-azul),
+      #ff2d55,
+      var(--overlay-azul),
+      #ff2d55,
+      var(--overlay-azul)
+    );
+    content: '';
+    animation:
+      neon-turn 8s linear infinite,
+      neon-pulse 2.4s ease-in-out infinite;
+  }
+
+  &::before {
+    inset: -5%;
+    filter: blur(14px);
+  }
+
+  &::after {
+    inset: -1.5%;
+    filter: blur(3px) brightness(1.5);
+  }
 }
 
 img {
@@ -50,30 +80,10 @@ img {
   animation: ball-spin $loop ease-in-out 1.2s infinite;
 }
 
-.shine {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(
-      105deg,
-      transparent 44%,
-      rgba(255, 255, 255, 0.55) 50%,
-      transparent 56%
-    )
-    100% 0 / 300% 100%;
-  mask: var(--logo) center / 100% 100% no-repeat;
-  animation: logo-shine $loop ease-in-out 1.2s infinite;
-}
-
 @keyframes logo-in {
   from {
     opacity: 0;
     transform: translateY(-40px) scale(0.6);
-  }
-}
-
-@keyframes logo-float {
-  50% {
-    transform: translateY(-7px);
   }
 }
 
@@ -87,12 +97,14 @@ img {
   }
 }
 
-@keyframes logo-shine {
-  0% {
-    background-position: 100% 0;
+@keyframes neon-turn {
+  to {
+    rotate: 360deg;
   }
-  18%,
-  100% {
-    background-position: 0 0;
+}
+
+@keyframes neon-pulse {
+  50% {
+    opacity: 0.65;
   }
 }

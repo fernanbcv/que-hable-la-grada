@@ -1,7 +1,7 @@
 <p class="label">{{ label() }}</p>
 <ul>
   @for (network of networks(); track network.name) {
-    <li [style.color]="network.color" [attr.aria-label]="network.name">
+    <li [style.color]="network.color" [style.--i]="$index" [attr.aria-label]="network.name">
       <svg [attr.viewBox]="network.viewBox" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
         <path fill-rule="evenodd" [attr.d]="network.path" />
       </svg>

@@ -1,3 +1,5 @@
+$loop: 7s;
+
 :host {
   display: flex;
   flex-direction: column;
@@ -6,13 +8,15 @@
 
 .label {
   margin: 0;
-  color: var(--overlay-muted);
+  color: #fff;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.6);
   font-family: var(--font-label);
   font-size: 18px;
   font-weight: 500;
   letter-spacing: 2px;
   line-height: 24px;
   white-space: nowrap;
+  animation: label-in 0.5s ease-out 1.1s both;
 }
 
 ul {
@@ -29,11 +33,41 @@ li {
   width: 44px;
   height: 44px;
   border-radius: 10px;
-  background: rgba(255, 255, 255, 0.09);
+  background: rgba(255, 255, 255, 0.92);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.35);
+  // Each button pops in after the one before it, then they hop one by one every loop
+  animation:
+    button-in 0.5s cubic-bezier(0.2, 1.6, 0.4, 1) calc(1.3s + var(--i) * 0.12s) both,
+    button-hop $loop ease-in-out calc(3s + var(--i) * 0.18s) infinite;
 }
 
 svg {
   width: 20px;
   height: 20px;
   fill: currentColor;
+}
+
+@keyframes label-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+}
+
+@keyframes button-in {
+  from {
+    opacity: 0;
+    transform: scale(0.3);
+  }
+}
+
+@keyframes button-hop {
+  0%,
+  10%,
+  100% {
+    transform: none;
+  }
+  5% {
+    transform: translateY(-9px) scale(1.12);
+  }
 }
