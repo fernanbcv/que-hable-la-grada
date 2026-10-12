@@ -5,15 +5,14 @@ describe('Overlay', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [Overlay],
-    })
-      .compileComponents();
+    }).compileComponents();
   });
 
   it('should render every element', async () => {
     const fixture = TestBed.createComponent(Overlay);
     await fixture.whenStable();
     const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.querySelector('app-show-title h1')?.textContent).toContain('QUE HABLE');
+    expect(compiled.querySelector('app-show-title-stencil h1')?.textContent).toContain('QUE HABLE');
     expect(compiled.querySelector('app-camera-frame')).toBeTruthy();
     // The 7 sponsors twice over, so the belt loops without a gap
     expect(compiled.querySelectorAll('app-sponsors-carousel li').length).toBe(14);
@@ -44,6 +43,21 @@ describe('Overlay', () => {
     const stage = (fixture.nativeElement as HTMLElement).querySelector('.stage');
     expect(stage?.children.length).toBe(1);
     expect(stage?.querySelector('app-sponsors-carousel')).toBeTruthy();
+  });
+
+  it('should draw the show title in the typeface the route asks for', async () => {
+    const fixture = TestBed.createComponent(Overlay);
+    const stage = () => (fixture.nativeElement as HTMLElement).querySelector('.stage');
+    for (const [element, selector] of [
+      ['titulo', 'app-show-title-stencil'],
+      ['titulo-stencil', 'app-show-title-stencil'],
+      ['titulo-pincel', 'app-show-title-brush'],
+    ]) {
+      fixture.componentRef.setInput('element', element);
+      await fixture.whenStable();
+      expect(stage()?.children.length).toBe(1);
+      expect(stage()?.querySelector(selector)).toBeTruthy();
+    }
   });
 
   it('should leave a camera hole in the background only in the full overlay', async () => {

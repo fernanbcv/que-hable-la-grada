@@ -1,18 +1,10 @@
+// The stadium photo under a navy tint, heavier on the sidebar and the bottom strip where the text sits
 :host {
   position: absolute;
   inset: 0;
   background:
-    radial-gradient(ellipse 45% 40% at 100% 100%, rgba(120, 20, 70, 0.35), transparent 70%),
-    radial-gradient(ellipse 60% 55% at 12% 0%, var(--overlay-blue), transparent 75%),
-    linear-gradient(180deg, #0a1f6b 0%, #081247 35%, var(--overlay-navy) 75%);
-}
-
-.stripes {
-  position: absolute;
-  inset: 0;
-  background: repeating-linear-gradient(
-    115deg,
-    rgba(255, 255, 255, 0.04) 0 1px,
-    transparent 1px 24px
-  );
+    linear-gradient(90deg, rgba(5, 10, 40, 0.55), transparent 30%),
+    linear-gradient(0deg, rgba(5, 10, 40, 0.6), transparent 25%),
+    linear-gradient(rgba(8, 18, 71, 0.42), rgba(5, 10, 40, 0.42)),
+    url('/images/Francisco-de-la-Hera-Extremadura.png') center / cover;
 }

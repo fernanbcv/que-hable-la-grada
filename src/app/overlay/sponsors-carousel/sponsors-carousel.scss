@@ -1,5 +1,5 @@
 $card-width: 196px;
-$card-gap: 6px;
+$card-gap: 2px;
 
 :host {
   display: flex;
@@ -19,27 +19,34 @@ $card-gap: 6px;
   text-align: right;
 }
 
-// A pitch-side LED advertising board: a dark frame around panels that run past edge to edge
+// A pitch-side advertising board: one lit screen between a top rail and a base, mirrored on the ground
+.board {
+  border-top: 4px solid #2a335f;
+  border-bottom: 9px solid #0a0d1f;
+  border-radius: 2px;
+  box-shadow:
+    0 0 0 1px #05070f,
+    0 0 34px rgba(150, 180, 255, 0.35);
+  -webkit-box-reflect: below 1px linear-gradient(transparent 62%, rgba(0, 0, 0, 0.3));
+}
+
 .viewport {
   position: relative;
   width: $card-width * 3 + $card-gap * 2;
-  padding: 5px 0;
   overflow: hidden;
-  border-radius: 6px;
-  background: #04060f;
-  box-shadow:
-    0 0 0 2px #1a2146,
-    0 0 26px rgba(47, 107, 255, 0.35),
-    0 10px 18px rgba(0, 0, 0, 0.45);
+  background: #05070f;
 
-  // The LED grid and the sheen of the screen, drawn over the moving panels
+  // The sheen of the screen, drawn over the moving panels
   &::after {
     position: absolute;
     inset: 0;
-    background:
-      linear-gradient(180deg, rgba(255, 255, 255, 0.2), transparent 30%, transparent 65%, rgba(0, 0, 0, 0.22)),
-      repeating-linear-gradient(0deg, rgba(0, 0, 0, 0.09) 0 1px, transparent 1px 4px),
-      repeating-linear-gradient(90deg, rgba(0, 0, 0, 0.09) 0 1px, transparent 1px 4px);
+    background: linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.25),
+      transparent 22%,
+      transparent 75%,
+      rgba(0, 0, 30, 0.16)
+    );
     content: '';
     pointer-events: none;
   }

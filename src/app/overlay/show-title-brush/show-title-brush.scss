@@ -1,0 +1,3 @@
+@use '../show-title/show-title';
+
+@include show-title.show-title('Protest Revolution', 52px);

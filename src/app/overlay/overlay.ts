@@ -7,7 +7,8 @@ import { LiveBadge } from './live-badge/live-badge';
 import { OverlayBackground } from './overlay-background/overlay-background';
 import { Bleed, STAGE, splitCamera } from './overlay-layout';
 import { ScheduleCard } from './schedule-card/schedule-card';
-import { ShowTitle } from './show-title/show-title';
+import { ShowTitleBrush } from './show-title-brush/show-title-brush';
+import { ShowTitleStencil } from './show-title-stencil/show-title-stencil';
 import { SocialLinks } from './social-links/social-links';
 import { SponsorsCarousel } from './sponsors-carousel/sponsors-carousel';
 import { StreamTitle } from './stream-title/stream-title';
@@ -17,6 +18,8 @@ export const OVERLAY_ELEMENTS = [
   'fondo',
   'logo',
   'titulo',
+  'titulo-stencil',
+  'titulo-pincel',
   'chat',
   'redes',
   'horario',
@@ -40,7 +43,8 @@ export const INTERVIEW_SIZES = [2, 3, 4];
     LiveBadge,
     OverlayBackground,
     ScheduleCard,
-    ShowTitle,
+    ShowTitleBrush,
+    ShowTitleStencil,
     SocialLinks,
     SponsorsCarousel,
     StreamTitle,
@@ -66,6 +70,15 @@ export class Overlay {
     this.element() === 'fondo' ? [] : splitCamera(this.interview()),
   );
 
+  /** Typeface of the show title to draw: the stencil one unless /titulo-pincel asks for the brush. */
+  protected readonly title = computed(() => {
+    const only = this.element();
+    if (only === 'titulo-pincel') {
+      return 'pincel';
+    }
+    return !only || only === 'titulo' || only === 'titulo-stencil' ? 'stencil' : null;
+  });
+
   /**
    * Shrinks or grows the 1920x1080 canvas to fit the window and centres it. In a 1920x1080 OBS
    * browser source the scale is 1 and there is no bleed.
@@ -77,7 +90,7 @@ export class Overlay {
     return `scale(${scale}) translate(${bleed.x}px, ${bleed.y}px)`;
   });
 
-  protected shows(element: OverlayElement): boolean {
+  protected shows(element: Exclude<OverlayElement, `titulo${string}`>): boolean {
     const only = this.element();
     return !only || only === element;
   }

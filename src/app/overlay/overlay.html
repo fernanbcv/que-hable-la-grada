@@ -6,8 +6,13 @@
   @if (shows('logo')) {
     <app-brand-logo class="logo" />
   }
-  @if (shows('titulo')) {
-    <app-show-title class="show-title" />
+  @switch (title()) {
+    @case ('stencil') {
+      <app-show-title-stencil class="show-title" />
+    }
+    @case ('pincel') {
+      <app-show-title-brush class="show-title" />
+    }
   }
   @if (shows('chat')) {
     <app-chat-box class="chat" />

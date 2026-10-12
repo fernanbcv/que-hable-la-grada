@@ -3,14 +3,14 @@
 $loop: 7s;
 
 // Geometry of lorengonca_escudo.png: the shield sits inside transparent padding
-$image-width: 800;
-$image-height: 1100;
-$shield-left: 50;
-$shield-top: 40;
-$shield-width: 700;
-$ball-x: 532;
-$ball-y: 722;
-$ball-radius: 97;
+$image-width: 2000;
+$image-height: 2000;
+$shield-left: 8;
+$shield-top: 8;
+$shield-width: 1984;
+$ball-x: 1000;
+$ball-y: 1000;
+$ball-radius: 500;
 
 :host {
   display: block;

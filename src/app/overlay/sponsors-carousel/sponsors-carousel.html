@@ -1,18 +1,20 @@
 <p class="label">{{ label() }}</p>
-<div class="viewport">
-  <ul
-    [class.scrolling]="scrolling()"
-    [style.--count]="sponsors().length"
-    [style.animation-duration.ms]="loop()"
-  >
-    @for (item of row(); track $index) {
-      <li [attr.aria-hidden]="item.copy || null">
-        <img
-          [src]="item.sponsor.logo"
-          [alt]="item.copy ? '' : item.sponsor.name"
-          [style.scale]="item.sponsor.scale"
-        />
-      </li>
-    }
-  </ul>
+<div class="board">
+  <div class="viewport">
+    <ul
+      [class.scrolling]="scrolling()"
+      [style.--count]="sponsors().length"
+      [style.animation-duration.ms]="loop()"
+    >
+      @for (item of row(); track $index) {
+        <li [attr.aria-hidden]="item.copy || null">
+          <img
+            [src]="item.sponsor.logo"
+            [alt]="item.copy ? '' : item.sponsor.name"
+            [style.scale]="item.sponsor.scale"
+          />
+        </li>
+      }
+    </ul>
+  </div>
 </div>
