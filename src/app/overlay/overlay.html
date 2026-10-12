@@ -1,6 +1,6 @@
-<div class="stage" [style.transform]="'scale(' + scale() + ')'">
+<div class="stage" [style.transform]="transform()">
   @if (shows('fondo')) {
-    <app-overlay-background [cameras]="cameras()" />
+    <app-overlay-background [cameras]="cameras()" [bleed]="fit().bleed" />
   }
 
   @if (shows('logo')) {

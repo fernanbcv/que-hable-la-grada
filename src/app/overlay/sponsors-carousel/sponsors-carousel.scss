@@ -34,7 +34,7 @@ ul {
 
   &.sliding {
     transform: translateX(-($card-width + $card-gap));
-    transition: transform 0.6s ease-in-out;
+    transition: transform 0.4s ease-in-out;
   }
 }
 

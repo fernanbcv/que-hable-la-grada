@@ -5,7 +5,7 @@ import { ChatBox } from './chat-box/chat-box';
 import { Interview } from './interview/interview';
 import { LiveBadge } from './live-badge/live-badge';
 import { OverlayBackground } from './overlay-background/overlay-background';
-import { STAGE, splitCamera } from './overlay-layout';
+import { Bleed, STAGE, splitCamera } from './overlay-layout';
 import { ScheduleCard } from './schedule-card/schedule-card';
 import { ShowTitle } from './show-title/show-title';
 import { SocialLinks } from './social-links/social-links';
@@ -48,7 +48,7 @@ export const INTERVIEW_SIZES = [2, 3, 4];
   selector: 'app-overlay',
   styleUrl: './overlay.scss',
   templateUrl: './overlay.html',
-  host: { '(window:resize)': 'scale.set(fitScale())' },
+  host: { '(window:resize)': 'fit.set(fitStage())' },
 })
 export class Overlay {
   /** When set, only that element is drawn, in its usual place on a transparent canvas. */
@@ -61,11 +61,21 @@ export class Overlay {
     const count = Number(this.participantes());
     return INTERVIEW_SIZES.includes(count) ? count : 0;
   });
-  protected readonly cameras = computed(() => splitCamera(this.interview()));
+  /** Holes to leave in the background. On its own at /fondo it is solid, with no camera area. */
+  protected readonly cameras = computed(() =>
+    this.element() === 'fondo' ? [] : splitCamera(this.interview()),
+  );
 
-  /** Shrinks or grows the 1920x1080 canvas to fit the window. It is 1 in a 1920x1080 OBS browser source. */
-  protected readonly scale = signal(fitScale());
-  protected readonly fitScale = fitScale;
+  /**
+   * Shrinks or grows the 1920x1080 canvas to fit the window and centres it. In a 1920x1080 OBS
+   * browser source the scale is 1 and there is no bleed.
+   */
+  protected readonly fit = signal(fitStage());
+  protected readonly fitStage = fitStage;
+  protected readonly transform = computed(() => {
+    const { scale, bleed } = this.fit();
+    return `scale(${scale}) translate(${bleed.x}px, ${bleed.y}px)`;
+  });
 
   protected shows(element: OverlayElement): boolean {
     const only = this.element();
@@ -73,6 +83,14 @@ export class Overlay {
   }
 }
 
-function fitScale(): number {
-  return Math.min(window.innerWidth / STAGE.width, window.innerHeight / STAGE.height);
+/** The scale of the canvas and the space left over on each side of it, in canvas px. */
+function fitStage(): { scale: number; bleed: Bleed } {
+  const scale = Math.min(window.innerWidth / STAGE.width, window.innerHeight / STAGE.height);
+  return {
+    scale,
+    bleed: {
+      x: (window.innerWidth / scale - STAGE.width) / 2,
+      y: (window.innerHeight / scale - STAGE.height) / 2,
+    },
+  };
 }

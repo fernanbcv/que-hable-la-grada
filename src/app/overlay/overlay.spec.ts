@@ -44,4 +44,18 @@ describe('Overlay', () => {
     expect(stage?.children.length).toBe(1);
     expect(stage?.querySelector('app-sponsors-carousel')).toBeTruthy();
   });
+
+  it('should leave a camera hole in the background only in the full overlay', async () => {
+    const fixture = TestBed.createComponent(Overlay);
+    await fixture.whenStable();
+    const clipPath = () =>
+      (fixture.nativeElement as HTMLElement).querySelector<HTMLElement>('app-overlay-background')
+        ?.style.clipPath ?? '';
+    // One subpath for the canvas and one for the camera
+    expect(clipPath().match(/M/g)?.length).toBe(2);
+
+    fixture.componentRef.setInput('element', 'fondo');
+    await fixture.whenStable();
+    expect(clipPath().match(/M/g)?.length).toBe(1);
+  });
 });

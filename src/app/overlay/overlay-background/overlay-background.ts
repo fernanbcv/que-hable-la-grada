@@ -1,30 +1,36 @@
 import { Component, computed, input } from '@angular/core';
-import { CAMERA, Rect, STAGE } from '../overlay-layout';
+import { Bleed, CAMERA, Rect, STAGE } from '../overlay-layout';
 
 @Component({
   selector: 'app-overlay-background',
   styleUrl: './overlay-background.scss',
   templateUrl: './overlay-background.html',
-  host: { '[style.clip-path]': 'clipPath()' },
+  host: { '[style.inset]': 'inset()', '[style.clip-path]': 'clipPath()' },
 })
 export class OverlayBackground {
   /** Camera areas to leave transparent. */
   readonly cameras = input<Rect[]>([CAMERA]);
+  /** How far to extend past the canvas on each side, so the background fills a window of any shape. */
+  readonly bleed = input<Bleed>({ x: 0, y: 0 });
 
-  /** Full canvas minus a rounded hole per camera, so the OBS sources underneath show through. */
+  protected readonly inset = computed(() => `${-this.bleed().y}px ${-this.bleed().x}px`);
+
+  /** Canvas and bleed minus a rounded hole per camera, so the OBS sources underneath show through. */
   protected readonly clipPath = computed(() => {
-    const canvas = `M0 0H${STAGE.width}V${STAGE.height}H0Z`;
-    return `path(evenodd, "${canvas} ${this.cameras().map(holePath).join(' ')}")`;
+    const bleed = this.bleed();
+    const area = `M0 0H${STAGE.width + 2 * bleed.x}V${STAGE.height + 2 * bleed.y}H0Z`;
+    const holes = this.cameras().map((camera) => holePath(camera, bleed));
+    return `path(evenodd, "${area} ${holes.join(' ')}")`;
   });
 }
 
-function holePath(camera: Rect): string {
+function holePath(camera: Rect, bleed: Bleed): string {
   const inset = CAMERA.border - 1;
   const r = CAMERA.radius - inset;
-  const left = camera.x + inset;
-  const top = camera.y + inset;
-  const right = camera.x + camera.width - inset;
-  const bottom = camera.y + camera.height - inset;
+  const left = bleed.x + camera.x + inset;
+  const top = bleed.y + camera.y + inset;
+  const right = bleed.x + camera.x + camera.width - inset;
+  const bottom = bleed.y + camera.y + camera.height - inset;
 
   return (
     `M${left + r} ${top}H${right - r}A${r} ${r} 0 0 1 ${right} ${top + r}` +

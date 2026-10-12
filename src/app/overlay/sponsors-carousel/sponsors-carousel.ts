@@ -28,7 +28,7 @@ export class SponsorsCarousel {
   readonly label = input('CON EL APOYO DE');
   readonly sponsors = input(DEFAULT_SPONSORS);
   /** Milliseconds each sponsor stays in place before the row advances. */
-  readonly interval = input(8000);
+  readonly interval = input(2500);
 
   protected readonly sliding = signal(false);
   private readonly first = signal(0);

@@ -8,6 +8,12 @@ export interface Rect {
   height: number;
 }
 
+/** Window space left over on each side of the canvas when the window is not 16:9, in canvas px. */
+export interface Bleed {
+  x: number;
+  y: number;
+}
+
 /** Where the camera sits on the canvas. The background leaves this area transparent. */
 export const CAMERA = { x: 358, y: 26, width: 1537, height: 866, radius: 18, border: 3 };
 
