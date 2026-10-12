@@ -14,8 +14,9 @@ describe('Overlay', () => {
     const compiled = fixture.nativeElement as HTMLElement;
     expect(compiled.querySelector('app-show-title-stencil h1')?.textContent).toContain('QUE HABLE');
     expect(compiled.querySelector('app-camera-frame')).toBeTruthy();
-    // The 7 sponsors twice over, so the belt loops without a gap
-    expect(compiled.querySelectorAll('app-sponsors-carousel li').length).toBe(14);
+    // One board on air, with a different sponsor on each of its 3 panels
+    expect(compiled.querySelectorAll('app-sponsors-carousel .layer').length).toBe(1);
+    expect(compiled.querySelectorAll('app-sponsors-carousel li').length).toBe(3);
     expect(compiled.querySelector('.stage')?.children.length).toBe(11);
   });
 

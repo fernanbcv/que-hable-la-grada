@@ -1,19 +1,16 @@
 <div class="board">
   <div class="viewport">
-    <ul
-      [class.scrolling]="scrolling()"
-      [style.--count]="sponsors().length"
-      [style.animation-duration.ms]="loop()"
-    >
-      @for (item of row(); track $index) {
-        <li [attr.aria-hidden]="item.copy || null">
-          <img
-            [src]="item.sponsor.logo"
-            [alt]="item.copy ? '' : item.sponsor.name"
-            [style.scale]="item.sponsor.scale"
-          />
-        </li>
-      }
-    </ul>
+    @for (layer of layers(); track layer.step) {
+      <div class="layer" [class.on-air]="layer.onAir" [attr.aria-hidden]="!layer.onAir || null">
+        <ul class="advert">
+          @for (sponsor of layer.sponsors; track sponsor.name) {
+            <li>
+              <img [src]="sponsor.logo" [alt]="sponsor.name" [style.scale]="sponsor.scale" />
+            </li>
+          }
+        </ul>
+        <span class="sweep"></span>
+      </div>
+    }
   </div>
 </div>

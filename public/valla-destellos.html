@@ -1,0 +1,280 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Destellos de la valla</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 24px 28px 60px;
+      background: #070b22;
+      color: #fff;
+      font: 15px/1.4 system-ui, sans-serif;
+    }
+
+    h1 {
+      margin: 0 0 4px;
+      font-size: 22px;
+    }
+
+    p {
+      margin: 0 0 18px;
+      color: #aab3e0;
+    }
+
+    main {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(640px, 1fr));
+      gap: 18px;
+    }
+
+    article {
+      padding: 14px 20px 34px;
+      border-radius: 10px;
+      background:
+        linear-gradient(rgba(8, 18, 71, 0.55), rgba(5, 10, 40, 0.7)),
+        url('images/Francisco-de-la-Hera-Extremadura.png') 60% 90% / 2000px auto;
+    }
+
+    h2 {
+      margin: 0 0 12px;
+      font-size: 15px;
+      font-weight: 600;
+    }
+
+    h2 b {
+      margin-right: 8px;
+      color: #ffd166;
+      font-size: 17px;
+    }
+
+    h2 span {
+      margin-left: 8px;
+      color: #aab3e0;
+      font-size: 13px;
+      font-weight: 400;
+    }
+
+    /* The board, as in sponsors-carousel.scss */
+    .board {
+      width: 588px;
+      border-top: 4px solid #2a335f;
+      border-bottom: 9px solid #0a0d1f;
+      box-shadow:
+        0 0 0 1px #05070f,
+        0 0 40px rgba(170, 195, 255, 0.5);
+    }
+
+    .viewport {
+      position: relative;
+      height: 90px;
+      overflow: hidden;
+      background: #fff;
+    }
+
+    .viewport::before {
+      position: absolute;
+      z-index: 2;
+      inset: 0;
+      background: repeating-linear-gradient(
+        90deg,
+        transparent 0 calc(100% / 3 - 1px),
+        rgba(4, 6, 15, 0.4) 0 calc(100% / 3)
+      );
+      content: '';
+    }
+
+    ul {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      margin: 0;
+      padding: 0;
+      background: #fff;
+      list-style: none;
+      filter: brightness(1.1) saturate(1.35);
+    }
+
+    li {
+      flex: 1;
+      box-sizing: border-box;
+      min-width: 0;
+      padding: 8px 12px;
+      overflow: hidden;
+    }
+
+    img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+
+    /* Three boards stacked: the second uncovers over the first, then a copy of the first uncovers
+       over the second, so the 8s loop starts again on an identical frame */
+    .second {
+      animation: uncover-second 8s linear infinite;
+    }
+
+    .third {
+      animation: uncover-third 8s linear infinite;
+    }
+
+    .fade .second {
+      animation-name: fade-second;
+    }
+
+    .fade .third {
+      animation-name: fade-third;
+    }
+
+    .sweep {
+      position: absolute;
+      z-index: 1;
+      inset: 0;
+      animation: sweep 4s linear infinite;
+    }
+
+    @keyframes uncover-second {
+      0% {
+        clip-path: polygon(0 0, calc(-20% + 12px) 0, calc(-20% - 12px) 100%, 0 100%);
+      }
+      25%,
+      100% {
+        clip-path: polygon(0 0, calc(120% + 12px) 0, calc(120% - 12px) 100%, 0 100%);
+      }
+    }
+
+    @keyframes uncover-third {
+      0%,
+      50% {
+        clip-path: polygon(0 0, calc(-20% + 12px) 0, calc(-20% - 12px) 100%, 0 100%);
+      }
+      75%,
+      100% {
+        clip-path: polygon(0 0, calc(120% + 12px) 0, calc(120% - 12px) 100%, 0 100%);
+      }
+    }
+
+    @keyframes fade-second {
+      0% {
+        opacity: 0;
+      }
+      6%,
+      100% {
+        opacity: 1;
+      }
+    }
+
+    @keyframes fade-third {
+      0%,
+      50% {
+        opacity: 0;
+      }
+      56%,
+      100% {
+        opacity: 1;
+      }
+    }
+
+    @keyframes sweep {
+      0% {
+        transform: translateX(-70%);
+      }
+      50%,
+      100% {
+        transform: translateX(70%);
+      }
+    }
+  </style>
+</head>
+<body>
+<h1>Destellos de la valla de patrocinadores</h1>
+<p>
+  Opciones para el cambio de patrocinadores. Todas se mueven en bucle, a la velocidad del overlay.
+  La elegida se pone en <code>src/app/overlay/sponsors-carousel/sponsors-carousel.scss</code>.
+</p>
+
+<main></main>
+
+<script>
+  const AZUL = '47, 107, 255';
+  const GRANA = '211, 36, 63';
+  const NAVY = '6, 11, 44';
+
+  // One soft band of a single colour, strongest in the middle
+  const band = (rgb, alpha) =>
+    `linear-gradient(105deg, transparent 38%, rgba(${rgb}, ${alpha}) 50%, transparent 62%)`;
+  // A crisp thin line
+  const line = (colour) =>
+    `linear-gradient(105deg, transparent 49.3%, ${colour} 49.3% 50.7%, transparent 50.7%)`;
+
+  // [name, description, background of the sweep or null for none, whether the boards dissolve]
+  const OPTIONS = [
+    [
+      'Azulgrana tenue',
+      'la que está puesta: azul y grana unidos por el morado, sin hueco en medio',
+      `linear-gradient(105deg, transparent 38%, rgba(${AZUL}, 0.5) 47%, rgba(129, 72, 159, 0.55) 50%, rgba(${GRANA}, 0.5) 53%, transparent 62%)`,
+    ],
+    ['Banda azul', 'un solo color, el azul del neón y del chat', band(AZUL, 0.9)],
+    ['Banda grana', 'un solo color, el rojo de «En directo»', band(GRANA, 0.8)],
+    ['Banda azul claro', 'un solo color, el de «Actualidad azulgrana»', band('142, 166, 255', 0.9)],
+    ['Banda dorada', 'un solo color, cálido', band('255, 196, 60', 0.85)],
+    [
+      'Luz blanca con halo azul hielo',
+      'núcleo blanco: sobre la valla blanca se lee como dos barras',
+      'linear-gradient(105deg, transparent 38%, rgba(150, 195, 255, 0.55) 46%, #fff 49%, #fff 51%, rgba(150, 195, 255, 0.55) 54%, transparent 62%)',
+    ],
+    ['Línea fina grana', 'un filo nítido, sin resplandor', line(`rgb(${GRANA})`)],
+    ['Línea fina azul marino', 'un filo nítido oscuro', line(`rgb(${NAVY})`)],
+    [
+      'Línea fina blanca con sombra',
+      'filo de luz con un poco de sombra',
+      `linear-gradient(105deg, transparent 46%, rgba(${NAVY}, 0.18) 49%, #fff 49.4% 50.6%, rgba(${NAVY}, 0.18) 51%, transparent 54%)`,
+    ],
+    ['Sombra suave', 'una franja oscura difuminada', band(NAVY, 0.45)],
+    ['Sin destello: cortinilla limpia', 'los nuevos van tapando a los anteriores, sin banda', null],
+    ['Sin destello: fundido', 'toda la valla cambia a la vez, como en el Bernabéu', null, true],
+  ];
+
+  // [file, scale] of the sponsors on each of the two boards
+  const FIRST = [['piscinas_calero'], ['soldal_inox', 1.7], ['villena']];
+  const SECOND = [['zamcar', 1.6], ['strata'], ['algeasalud']];
+
+  function board(sponsors, className) {
+    const list = document.createElement('ul');
+    list.className = className;
+    for (const [file, scale = 1] of sponsors) {
+      const image = document.createElement('img');
+      image.src = `images/sponsors/${file}.png`;
+      image.alt = '';
+      image.style.scale = scale;
+      list.appendChild(document.createElement('li')).appendChild(image);
+    }
+    return list;
+  }
+
+  const main = document.querySelector('main');
+  OPTIONS.forEach(([name, description, sweep, fade], index) => {
+    const card = main.appendChild(document.createElement('article'));
+
+    const title = card.appendChild(document.createElement('h2'));
+    title.appendChild(document.createElement('b')).textContent = index + 1;
+    title.append(name);
+    title.appendChild(document.createElement('span')).textContent = description;
+
+    const viewport = card
+      .appendChild(Object.assign(document.createElement('div'), { className: 'board' }))
+      .appendChild(document.createElement('div'));
+    viewport.className = fade ? 'viewport fade' : 'viewport';
+    viewport.append(board(FIRST, ''), board(SECOND, 'second'), board(FIRST, 'third'));
+    if (sweep) {
+      const bar = viewport.appendChild(document.createElement('span'));
+      bar.className = 'sweep';
+      bar.style.background = sweep;
+    }
+  });
+</script>
+</body>
+</html>

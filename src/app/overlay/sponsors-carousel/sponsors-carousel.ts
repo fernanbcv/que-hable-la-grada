@@ -1,4 +1,4 @@
-import { Component, computed, input } from '@angular/core';
+import { Component, computed, effect, input, signal, untracked } from '@angular/core';
 
 export interface Sponsor {
   name: string;
@@ -17,7 +17,8 @@ const DEFAULT_SPONSORS: Sponsor[] = [
   { name: 'Solimet', logo: 'images/sponsors/solimet.png', scale: 1.3 },
 ];
 
-const VISIBLE = 3;
+/** Panels of the board, each showing a different sponsor. */
+const PANELS = 3;
 
 @Component({
   selector: 'app-sponsors-carousel',
@@ -26,20 +27,38 @@ const VISIBLE = 3;
 })
 export class SponsorsCarousel {
   readonly sponsors = input(DEFAULT_SPONSORS);
-  /** Milliseconds the belt takes to move one sponsor along. */
-  readonly interval = input(2500);
+  /** Milliseconds a set of sponsors holds the board before a sweep of light brings in the next. */
+  readonly interval = input(4000);
 
-  /** Whether there are more sponsors than fit, so they have to scroll. */
-  protected readonly scrolling = computed(() => this.sponsors().length > VISIBLE);
+  /** How many times the board has changed. Each change moves on by a whole board of sponsors. */
+  protected readonly step = signal(0);
 
-  /** The sponsors, followed by a copy when scrolling so the belt loops without a gap. */
-  protected readonly row = computed(() => {
-    const sponsors = this.sponsors().map((sponsor) => ({ sponsor, copy: false }));
-    return this.scrolling()
-      ? [...sponsors, ...sponsors.map((item) => ({ ...item, copy: true }))]
-      : sponsors;
+  /**
+   * The board on air on top of the one before it, which shows through until the sweep has crossed.
+   * Tracked by step, so every new one is a new element and plays its entrance.
+   */
+  protected readonly layers = computed(() => {
+    const sponsors = this.sponsors();
+    const step = this.step();
+    return (step ? [step - 1, step] : [step]).map((index) => ({
+      step: index,
+      onAir: index === step,
+      sponsors: Array.from(
+        { length: Math.min(PANELS, sponsors.length) },
+        (_, panel) => sponsors[(index * PANELS + panel) % sponsors.length],
+      ),
+    }));
   });
 
-  /** One full loop moves every sponsor past, so it lasts one interval per sponsor. */
-  protected readonly loop = computed(() => this.interval() * this.sponsors().length);
+  constructor() {
+    // Restarts the board whenever its sponsors or its timing change
+    effect((onCleanup) => {
+      untracked(() => this.step.set(0));
+      if (this.sponsors().length <= PANELS) {
+        return;
+      }
+      const timer = setInterval(() => this.step.update((step) => step + 1), this.interval());
+      onCleanup(() => clearInterval(timer));
+    });
+  }
 }
