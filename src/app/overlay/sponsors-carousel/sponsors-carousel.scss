@@ -112,6 +112,81 @@ li {
   overflow: hidden;
 }
 
+// One sponsor across every panel, its logo cut into pieces laid out in a row
+.full {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  padding: 6px 16px;
+}
+
+.piece {
+  flex: none;
+  background-repeat: no-repeat;
+}
+
+.divider {
+  flex: none;
+  width: 2px;
+  height: 56%;
+  background: #7a1c28;
+}
+
+// The credit for whoever made the overlay, one part on each panel: who made it, their logo and how
+// to reach them, over a wash of the logo's pink and cyan
+.credit {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  padding: 0;
+  background: linear-gradient(100deg, #ffd6eb, #fff 40%, #fff 60%, #d2f7ff);
+  font-family: 'Nunito', sans-serif;
+  white-space: nowrap;
+
+  > span {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-width: 0;
+    padding: 6px 10px;
+  }
+}
+
+.credit-label {
+  color: #c0267f;
+  font-size: 22px;
+  font-weight: 800;
+  line-height: 1.05;
+  letter-spacing: 0.14em;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.credit > .credit-logo {
+  // The name written out in the logo's colours: its bubble lettering blurs at the board's size
+  flex-direction: row;
+  color: #c0267f;
+  font-size: 34px;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+
+  span:last-child {
+    color: #1a8fae;
+  }
+}
+
+.credit-email {
+  color: #4b4f63;
+  font-size: 17px;
+  font-weight: 800;
+  line-height: 1.25;
+
+  span:last-child {
+    color: #1a8fae;
+  }
+}
+
 img {
   display: block;
   width: 100%;

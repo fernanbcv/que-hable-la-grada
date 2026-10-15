@@ -3,6 +3,28 @@
     @for (layer of layers(); track layer.step) {
       <div class="layer" [class.on-air]="layer.onAir" [attr.aria-hidden]="!layer.onAir || null">
         <ul class="advert">
+          @if (layer.wide; as sponsor) {
+            @if (sponsor.credit; as credit) {
+              @let address = credit.email.split('@');
+              <li class="credit">
+                <span class="credit-label">Hecho<br />por</span>
+                <span class="credit-logo"><span>Fernan</span><span>bcv</span></span>
+                <span class="credit-email">
+                  <span>{{ address[0] }}</span>
+                  <span>&#64;{{ address[1] }}</span>
+                </span>
+              </li>
+            } @else {
+              <li class="full" role="img" [attr.aria-label]="sponsor.name">
+                @for (piece of sponsor.wide!.pieces; track $index) {
+                  @if (piece.divider) {
+                    <span class="divider"></span>
+                  }
+                  <span class="piece" [style]="pieceStyle(sponsor, piece)"></span>
+                }
+              </li>
+            }
+          }
           @for (sponsor of layer.sponsors; track sponsor.name) {
             <li>
               <img [src]="sponsor.logo" [alt]="sponsor.name" [style.scale]="sponsor.scale" />
