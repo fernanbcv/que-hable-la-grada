@@ -40,25 +40,6 @@ const DEFAULT_SPONSORS: Sponsor[] = [
   { name: 'Strata Hormigones y Pavimentos', logo: 'images/sponsors/strata.png' },
   { name: 'AlgeaSalud', logo: 'images/sponsors/algeasalud.png' },
   { name: 'Solimet', logo: 'images/sponsors/solimet.png', scale: 1.3 },
-  {
-    name: 'Benítez-Cano Abogados',
-    logo: 'images/sponsors/benitez_cano.png',
-    // The scales and bar, the name, then the phone and address
-    wide: {
-      width: 1579,
-      height: 2000,
-      pieces: [
-        { x: 120, y: 95, width: 1345, height: 1050, size: 84 },
-        { x: 125, y: 1200, width: 1335, height: 345, size: 60 },
-        { x: 305, y: 1685, width: 965, height: 187, size: 56, divider: true },
-      ],
-    },
-  },
-  {
-    name: 'Hecho por Fernanbcv',
-    logo: 'images/sponsors/fernanbcv.png',
-    credit: { email: 'fbenitezcanov02@gmail.com' },
-  },
 ];
 
 /** Panels of the board, each showing a different sponsor. */
